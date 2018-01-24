@@ -18,6 +18,14 @@ const App = () => {
     </div>
   )
 }
+
+const Osa = (props) => {
+    return (
+        <div>
+            <p>{props.nimi} {props.tehtavamaara}</p>
+        </div>
+    )
+}
 const Otsikko = (props) => {
 
     return (
@@ -32,9 +40,9 @@ const Sisalto = (props) => {
 
     return (
         <div>
-        <p>{props.osa1} {props.tehtavia1}</p>
-        <p>{props.osa2} {props.tehtavia2}</p>
-        <p>{props.osa3} {props.tehtavia3}</p>
+        <Osa nimi = {props.osa1} tehtavamaara = {props.tehtavia1} />
+        <Osa nimi = {props.osa2} tehtavamaara = {props.tehtavia2} />
+        <Osa nimi = {props.osa3} tehtavamaara = {props.tehtavia3} />
         </div>
     )
 }
@@ -43,7 +51,7 @@ const Yhteensa = (props) => {
 
     return (
         <div>
-        <p>Yhteensä {props.tehtavia1 + props.tehtavia2 + props.tehtavia3} Tehtävää</p>
+        <p>Yhteensä {props.tehtavia1 + props.tehtavia2 + props.tehtavia3} tehtävää</p>
         </div>
     )
 }
