@@ -19,6 +19,12 @@ class App extends React.Component {
             (this.state.hyva*1 + this.state.huono*-1) / (this.state.hyva + this.state.huono + this.state.neutraali)
         )
     }
+
+    positiivisia() {
+        return (
+            this.state.hyva / (this.state.hyva + this.state.neutraali + this.state.huono) * 100
+        )
+    }
     render() {
         return(
             <div>
@@ -31,6 +37,7 @@ class App extends React.Component {
                 <p>neutraali {this.state.neutraali}</p>
                 <p>huono {this.state.huono}</p>
                 <p>keskiarvo {this.keskiarvo()}</p>
+                <p>positiivisia {this.positiivisia()} %</p>
             </div>
         )
     }
