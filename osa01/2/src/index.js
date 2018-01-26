@@ -13,49 +13,57 @@ class App extends React.Component {
             huono: 0
         }
     }
+
+    handleClick = (positiivisuus) => {
+        return () => {
+            const uusiArvo = this.state[positiivisuus] + 1
+            this.setState({ [positiivisuus]: uusiArvo})
+            console.log(this.state[positiivisuus])
+        }
+    }
     render() {
-        return(
+        return (
             <div>
                 <h1>anna palautetta</h1>
-                <Button handleClick={() => this.setState({hyva: this.state.hyva + 1})} text="hyvä"/>
-                <Button handleClick={() => this.setState({neutraali: this.state.neutraali +1})} text="neutraali"/>
-                <Button handleClick={() => this.setState({huono: this.state.huono + 1})} text="huono"/>
-                <Statistics state={this.state}/>
+                <Button handleClick={this.handleClick('hyva')} text='hyvä'/>
+                <Button handleClick={this.handleClick('neutraali')} text='neutraali'/>
+                <Button handleClick={this.handleClick('huono')} text='huono'/>
+                <Statistics state={this.state} />
             </div>
         )
     }
 
 }
 
-const Button = ({handleClick, text}) => (
+const Button = ({ handleClick, text }) => (
     <button onClick={handleClick}>{text}</button>
 )
 
-const Statistics = ({state}) => {
+const Statistics = ({ state }) => {
     if (state.hyva === 0 && state.neutraali === 0 && state.huono === 0) {
         return (
             <div><h1>statistiikka</h1><p>ei yhtään palautetta annettu</p></div>
         )
     }
     return (
-    <div>
-        <h1>statistiikka</h1>
-        <Statistic text="hyvä" value={state.hyva}/>
-        <Statistic text="neutraali" value={state.neutraali}/>
-        <Statistic text="huono" value={state.huono}/>
-        <Statistic text="keskiarvo" value={(state.hyva*1 + state.huono*-1) / (state.hyva + state.huono + state.neutraali)}/>
-        <Statistic text="positiivisia" value={state.hyva / (state.hyva + state.neutraali + state.huono) * 100} text2="%"/>
-    </div>
+        <div>
+            <h1>statistiikka</h1>
+            <Statistic text="hyvä" value={state.hyva} />
+            <Statistic text="neutraali" value={state.neutraali} />
+            <Statistic text="huono" value={state.huono} />
+            <Statistic text="keskiarvo" value={(state.hyva * 1 + state.huono * -1) / (state.hyva + state.huono + state.neutraali)} />
+            <Statistic text="positiivisia" value={state.hyva / (state.hyva + state.neutraali + state.huono) * 100} text2="%" />
+        </div>
     )
 }
-    
 
 
-const Statistic = ({text, value, text2}) => (
+
+const Statistic = ({ text, value, text2 }) => (
     <p>{text} {value} {text2}</p>
 )
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+    <App />,
+    document.getElementById('root')
 )
