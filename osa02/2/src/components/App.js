@@ -1,5 +1,7 @@
 import React from 'react';
-
+import Persons from './Persons';
+import Input from './Input';
+import AddPerson from './AddPerson';
 
 class App extends React.Component {
   constructor(props) {
@@ -41,7 +43,7 @@ class App extends React.Component {
     this.setState({ newNumber: event.target.value })
   }
   handleFilterChange = (event) => {
-    this.setState({filter: event.target.value})
+    this.setState({ filter: event.target.value })
   }
 
   render() {
@@ -50,23 +52,9 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
-        <div>
-          rajaa näytettäviä: <input onChange={this.handleFilterChange} />
-        </div>
-        <h2>Lisää uusi</h2>
-        <form onSubmit={this.addName}>
-          <div>
-            nimi:  <input value={this.state.newName} onChange={this.handleNameChange} />
-          </div>
-          <div>
-            numero: <input value={this.state.newNumber} onChange={this.handleNumberChange} />
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
-        <h2>Numerot</h2>
-        <ul>{personsToShow.map(person => <div key={person.name}>{person.name} {person.number}</div>)}</ul>
+        <Input text="rajaa näytettäviä: " handleChange={this.handleFilterChange} />
+        <AddPerson onSubmit={this.addName} handleNameChange={this.handleNameChange} handleNumberChange={this.handleNumberChange} />
+        <Persons persons={personsToShow} />
       </div>
     )
   }
