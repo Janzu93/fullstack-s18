@@ -1,6 +1,5 @@
 import React from 'react'
 import Kurssi from './Kurssi'
-import Otsikko from './Otsikko';
 
 const App = () => {
     const kurssit = [
@@ -45,7 +44,7 @@ const App = () => {
 
     return (
         <div>
-            <Otsikko otsikko='Opetusohjelma' />
+            <h1>Opetusohjelma</h1>
             {kurssit.map(kurssi => <Kurssi key={kurssi.id} kurssi={kurssi} />)}
         </div>
     )
