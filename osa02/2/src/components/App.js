@@ -1,18 +1,14 @@
-import React from 'react';
-import Persons from './Persons';
-import Input from './Input';
-import AddPerson from './AddPerson';
+import React from 'react'
+import axios from 'axios'
+import Persons from './Persons'
+import Input from './Input'
+import AddPerson from './AddPerson'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: [
-        { name: 'Arto Hellas', number: '040-123456' },
-        { name: 'Martti Tienari', number: '040-123456' },
-        { name: 'Arto Järvinen', number: '040-123456' },
-        { name: 'Lea Kutvonen', number: '040-123456' }
-      ],
+      persons: [],
       newName: '',
       newNumber: '',
       filter: '',
@@ -46,6 +42,10 @@ class App extends React.Component {
     this.setState({ filter: event.target.value })
   }
 
+  componentDidMount() {
+    axios.get('http://localhost:3001/persons')
+    .then(res => this.setState({ persons: res.data}))
+  }
   render() {
     const personsToShow = this.state.persons.filter(p => p.name.toLowerCase().includes(this.state.filter.toLowerCase()))
 
