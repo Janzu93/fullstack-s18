@@ -18,10 +18,11 @@ class App extends React.Component {
       name: this.state.newName
     }
 
-    const persons = this.state.persons.concat(personObject)
+    const persons = this.state.persons.find(p => p.name === personObject.name)?
+    this.state.persons : this.state.persons.concat(personObject)
 
     this.setState({
-      persons: persons,
+      persons,
       newName: ''
     })
   }
