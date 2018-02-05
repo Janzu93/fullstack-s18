@@ -21,6 +21,8 @@ class App extends React.Component {
       name: this.state.newName,
       number: this.state.newNumber
     }
+    
+    axios.post('http://localhost:3001/persons', personObject)
 
     const persons = this.state.persons.find(p => p.name === personObject.name) ?
       this.state.persons : this.state.persons.concat(personObject)
