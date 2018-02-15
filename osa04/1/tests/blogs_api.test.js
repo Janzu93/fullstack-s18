@@ -30,6 +30,16 @@ describe('Test POST', () => {
     url: "https://reactpatterns.com.ion/"
   }
 
+  const newBlogNoTitle = {
+    author: "Michael Changgg",
+    url: "https://reactpatterns.com.ion/"
+  }
+
+  const newBlogNoUrl = {
+    title: "Reaction patterns",
+    author: "Michael Changgg"
+  }
+
   test('blogs are added when POST', async () => {
     await api
       .post('/api/blogs')
@@ -46,13 +56,28 @@ describe('Test POST', () => {
       .expect('Content-Type', /application\/json/)
 
     const res = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-    
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
     expect(res.body[0].likes).toBe(0)
   })
+
+  test('Adding blogs without title return "400 Bad request"', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlogNoTitle)
+      .expect(400)
+  })
+
+  test('Adding blogs without url return "400 Bad request"', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlogNoUrl)
+      .expect(400)
+  })
 })
+
 afterAll(() => {
   server.close()
 })
