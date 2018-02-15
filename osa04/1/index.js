@@ -15,7 +15,15 @@ mongoose.Promise = global.Promise
 
 app.use('/api/blogs', blogsRouter)
 
-const PORT = config.port
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+
+const server = http.createServer(app)
+server.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`)
 })
+server.on('close', () => {
+  mongoose.connection.close()
+}) 
+
+module.exports = {
+  app, server 
+}
