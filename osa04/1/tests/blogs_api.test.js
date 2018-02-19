@@ -2,17 +2,39 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const { format, initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
 
-beforeAll(async () => {
-  await Blog.remove({})
-})
+describe('When there are initially blogs', async () => {
+  beforeAll(async () => {
+    await Blog.remove({})
 
-describe('Test GET', () => {
-  test('blogs are returned as JSON', async () => {
-    await api
+    const blogObjects = initialBlogs.map(b => new Blog(b))
+    await Promise.all(blogObjects.map(b => b.save()))
+  })
+
+  test('blogs are returned as JSON when GET', async () => {
+    const blogsInDatabase = await blogsInDb()
+    const response = await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+
+      expect(response.body.length).toBe(blogsInDatabase.length)
+
+      const returnedTitles = response.body.map(b => b.title)
+      blogsInDatabase.forEach(blog => {
+        expect(returnedTitle).toContain(blog.title)
+      })
+  })
+
+  test('individual blogs are returned as JSON as GET', async() => {
+    const blogsInDatabase = await blogsInDb()
+    const blog = blogsInDatabase[0]
+    .get(`/api/blogs/${blog.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+    expect(response.body.title).toBe(blog.title)
   })
 })
 
