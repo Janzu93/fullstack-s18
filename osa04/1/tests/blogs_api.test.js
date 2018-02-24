@@ -27,18 +27,6 @@ describe('When there are initially blogs', async () => {
     })
   })
 
-  test.skip('individual blogs are returned as JSON as GET', async () => {
-    const blogsInDatabase = await blogsInDb()
-    const blog = blogsInDatabase[0]
-
-    const response = await api
-      .get(`/api/blogs/${blog.id}`)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-
-    expect(response.body.title).toBe(blog.title)
-  })
-
   test('404 returned by GET /api/blogs/:id with nonexisting valid id', async () => {
     const validNonexistingId = await nonExistingId()
 
@@ -156,7 +144,7 @@ describe('Deleting one blog', async () => {
 
     await api
       .delete(`/api/blogs/${blog.id}`)
-      .expect(204)
+      .expect(200)
 
     const blogsAfterOperation = await blogsInDb()
 
@@ -175,6 +163,31 @@ describe('Deleting one blog', async () => {
     const blogsAfterOperation = await blogsInDb()
 
     expect(blogsAtStart.length).toBe(blogsAfterOperation.length)
+  })
+})
+
+describe('Editing blogs works as expected', async () => {
+  test('POST to /api/blogs/:id increases likes by 1 and returns expected statuscode', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blog = blogsAtStart[0]
+
+    await api
+      .post(`/api/blogs/${blog.id}`)
+      .expect(200)
+
+    const blogsAfterOperation = await blogsInDb()
+    expect(blogsAtStart[0].likes).toBe(blogsAfterOperation[0].likes - 1)
+  })
+
+  test('POST to /api/blogs/:id with non-existing id fails and returns expected statuscode', async () => {
+    const blogsAtStart = await blogsInDb()
+
+    await api
+      .post('/api/blogs/5a3d5da59070081a82a3445')
+      .expect(400)
+
+      const blogsAfterOperation = await blogsInDb()
+      expect(blogsAtStart[0].likes).toBe(blogsAfterOperation[0].likes)
   })
 })
 

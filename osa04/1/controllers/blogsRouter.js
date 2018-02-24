@@ -22,9 +22,24 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+
   try {
     await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+    response.json()
+  } catch (exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformed id' })
+  }
+})
+
+blogsRouter.post('/:id', async (request, response) => {
+
+  try {
+    let blog = await Blog.findById(request.params.id)
+    console.log(blog)
+    blog.likes = blog.likes + 1
+    blog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    response.status(200).json(blog)
   } catch (exception) {
     console.log(exception)
     response.status(400).send({ error: 'malformed id' })
