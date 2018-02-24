@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { format, initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
+const { format, initialBlogs, nonExistingId, blogsInDb } = require('./blogs_api_test_helper')
 
 describe('When there are initially blogs', async () => {
   beforeAll(async () => {
