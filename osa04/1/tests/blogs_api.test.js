@@ -146,6 +146,38 @@ describe('Addition of new blog', () => {
   })
 })
 
+describe('Deleting one blog', async () => {
+
+  test('Deleting blog with id deletes blog and returns expected statuscode', async () => {
+
+    const blogsAtStart = await blogsInDb()
+
+    const blog = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blog.id}`)
+      .expect(204)
+
+    const blogsAfterOperation = await blogsInDb()
+
+    expect(blogsAtStart.length).toBe(blogsAfterOperation.length + 1)
+    expect(blogsAfterOperation).not.toContain(blog)
+  })
+
+  test('Deleting with unexisting id doesn\'t delete and returns expected statuscode', async () => {
+
+    const blogsAtStart = await blogsInDb()
+
+    await api
+      .delete(`/api/blogs/5a3d5da59070081a82a3445`)
+      .expect(400)
+
+    const blogsAfterOperation = await blogsInDb()
+
+    expect(blogsAtStart.length).toBe(blogsAfterOperation.length)
+  })
+})
+
 afterAll(() => {
   server.close()
 })
