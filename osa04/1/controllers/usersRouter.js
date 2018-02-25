@@ -9,10 +9,10 @@ usersRouter.post('/', async (request, response) => {
     const usernames = usersAtStart.map(u => u.username)
 
     if (usernames.includes(body.username)) {
-      return response.status(400).end()
+      return response.status(400).json({error: 'Username already in use'})
     }
     if (body.password.length < 3) {
-      return response.status(400).end()
+      return response.status(400).json({error: 'Password has to be at least 3 characters long'})
     }
 
     const saltRounds = 10
@@ -21,13 +21,9 @@ usersRouter.post('/', async (request, response) => {
     const user = new User({
       username: body.username,
       name: body.name,
-      adult: body.adult,
+      adult: body.adult === undefined ? true : body.adult,
       passwordHash
-    })
-
-    if (user.adult === undefined) {
-      user.adult = true
-    }
+    })}
 
     const savedUser = await user.save()
     response.json(savedUser)
@@ -39,16 +35,9 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.get('/', async (request, response) => {
-  const formatUser = (user) => {
-    return {
-      id: user.id,
-      username: user.username,
-      name: user.name,
-      adult: user.adult
-    }
-  }
+
   const users = await User.find({})
-  response.json(users.map(formatUser))
+  response.json(users.map(u => User.format(u)))
 })
 
 module.exports = usersRouter
