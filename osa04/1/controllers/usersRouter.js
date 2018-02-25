@@ -5,14 +5,14 @@ const bcrypt = require('bcrypt')
 usersRouter.post('/', async (request, response) => {
   try {
     const body = request.body
-    const usersAtStart = await User.find({})
-    const usernames = usersAtStart.map(u => u.username)
+    const users = await User.find({}).populate('blogs')
+    const usernames = users.map(u => u.username)
 
     if (usernames.includes(body.username)) {
-      return response.status(400).json({error: 'Username already in use'})
+      return response.status(400).json({ error: 'Username already in use' })
     }
     if (body.password.length < 3) {
-      return response.status(400).json({error: 'Password has to be at least 3 characters long'})
+      return response.status(400).json({ error: 'Password has to be at least 3 characters long' })
     }
 
     const saltRounds = 10
@@ -23,7 +23,7 @@ usersRouter.post('/', async (request, response) => {
       name: body.name,
       adult: body.adult === undefined ? true : body.adult,
       passwordHash
-    })}
+    })
 
     const savedUser = await user.save()
     response.json(savedUser)
@@ -36,7 +36,7 @@ usersRouter.post('/', async (request, response) => {
 
 usersRouter.get('/', async (request, response) => {
 
-  const users = await User.find({})
+  const users = await User.find({}).populate('blogs')
   response.json(users.map(u => User.format(u)))
 })
 

@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const User = require('../models/user')
-const { format, initialUsers, nonExistingId, usersInDb } = require('./users_api_test_helper')
+const { initialUsers, nonExistingId, usersInDb } = require('./users_api_test_helper')
 
 describe('When there are initially users', async () => {
   beforeAll(async () => {

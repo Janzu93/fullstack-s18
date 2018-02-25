@@ -27,14 +27,7 @@ const initialUsers = [
   }
 ]
 
-const format = (user) => {
-  return {
-    id: user._id,
-    username: user.username,
-    name: user.name,
-    adult: user.adult
-  }
-}
+
 
 const nonExistingId = async () => {
   const user = new User()
@@ -46,9 +39,9 @@ const nonExistingId = async () => {
 
 const usersInDb = async () => {
   const users = await User.find({})
-  return users.map(format)
+  return users.map(u => User.format(u))
 }
 
 module.exports = {
-  initialUsers, format, nonExistingId, usersInDb
+  initialUsers, nonExistingId, usersInDb
 }

@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { format, initialBlogs, nonExistingId, blogsInDb } = require('./blogs_api_test_helper')
+const { initialBlogs, nonExistingId, blogsInDb } = require('./blogs_api_test_helper')
 
 describe('When there are initially blogs', async () => {
   beforeAll(async () => {
@@ -46,14 +46,14 @@ describe('When there are initially blogs', async () => {
 
 describe('Addition of new blog', () => {
 
-  test('POST /api/notes succeeds with valid data', async () => {
+  test('POST /api/blogs succeeds with valid data', async () => {
     const blogsAtStart = await blogsInDb()
 
     const newBlog = {
-      title: "Reaction patterns",
-      author: "Michael Changgg",
-      url: "https://reactpatterns.com.ion/",
-      likes: 0
+      "title": "Reaction patterns",
+      "author": "Michael Changgg",
+      "url": "https://reactpatterns.com.ion/",
+      "likes": 0
     }
 
 
@@ -67,8 +67,12 @@ describe('Addition of new blog', () => {
 
     expect(blogsAfterOperation.length).toBe(blogsAtStart.length + 1)
 
+
     const titles = blogsAfterOperation.map(r => r.title)
     expect(titles).toContain("Reaction patterns")
+
+    const users = blogsAfterOperation.map(r => r.user)
+    expect(users[users.length-1]).not.toBe(undefined)
   })
 
   test('Blogs without likes get added with 0 likes', async () => {
@@ -76,9 +80,9 @@ describe('Addition of new blog', () => {
     const blogsAtStart = await blogsInDb()
 
     const newBlog = {
-      title: "Reaction patterns",
-      author: "Michael Changgg",
-      url: "https://reactpatterns.com.ion/"
+      "title": "Reaction patterns",
+      "author": "Michael Changgg",
+      "url": "https://reactpatterns.com.ion/"
     }
 
     await api
@@ -99,8 +103,8 @@ describe('Addition of new blog', () => {
   test('Adding blogs without title return "400 Bad request" and don\'t modify db', async () => {
 
     const newBlog = {
-      author: "Michael Changgg",
-      url: "https://reactpatterns.com.ion/"
+      "author": "Michael Changgg",
+      "url": "https://reactpatterns.com.ion/"
     }
 
     const blogsAtStart = await blogsInDb()
@@ -118,8 +122,8 @@ describe('Addition of new blog', () => {
   test('Adding blogs without url return "400 Bad request" and don\'t modify db', async () => {
 
     const newBlog = {
-      title: "Reaction patterns",
-      author: "Michael Changgg"
+      "title": "Reaction patterns",
+      "author": "Michael Changgg"
     }
     const blogsAtStart = await blogsInDb()
 
