@@ -51,12 +51,24 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
 
+  const body = request.body
   try {
+    const blog = await Blog.findById(request.params.id)
+    const decodedToken = await jwt.verify(body.token, process.env.SECRET)
+
+    if (decodedToken.id !== blog.user.toString()) {
+      return response.status(401).send({ error: 'User not permitted to do such action' })
+    }
+
     await Blog.findByIdAndRemove(request.params.id)
     response.json()
   } catch (exception) {
-    console.log(exception)
-    response.status(400).send({ error: 'malformed id' })
+    if (exception.name === 'JsonWebTokenError') {
+      response.status(401).send({ error: exception.message })
+    } else {
+      console.log(exception)
+      response.status(400).send({ error: 'malformed id' })
+    }
   }
 })
 
