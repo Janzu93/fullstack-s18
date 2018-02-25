@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikphbnp1VCIsImlkIjoiNWE5MmM4ZTBlNmYyZDAwNjdiNWQ4MjgxIiwiaWF0IjoxNTE5NTcwNTU0fQ.0Tu3rimhdNE_C7VIiX6TRpG1rf4Yzlqs7p4A8zmFyX0
 
 {
     "title": "test1",
     "author": "hello",
     "url": "moimoi",
     "likes": 3
-}
+    }
