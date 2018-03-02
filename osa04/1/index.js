@@ -10,7 +10,7 @@ const loginRouter = require('./controllers/login')
 const config = require('./utils/config')
 
 const getTokenFrom = (request, response, next) => {
-  if (request.body.token === undefined) {
+  if (request.headers.authorization === undefined) {
     return next()
   }
   request.body.token = request.headers.authorization.substring(7)

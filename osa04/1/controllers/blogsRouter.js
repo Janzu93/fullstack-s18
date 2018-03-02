@@ -76,7 +76,6 @@ blogsRouter.post('/:id', async (request, response) => {
 
   try {
     let blog = await Blog.findById(request.params.id)
-    console.log(blog)
     blog.likes = blog.likes + 1
     blog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     response.status(200).json(blog)
