@@ -11,13 +11,13 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-
   try {
     const decodedToken = jwt.verify(body.token, process.env.SECRET)
 
     if (!body.token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
+
 
     const user = await User.findById(decodedToken.id)
     const blog = new Blog({
@@ -28,7 +28,7 @@ blogsRouter.post('/', async (request, response) => {
       user: user._id
     })
 
-    if (blog.url === undefined || blog.title === undefined) {
+    if (!blog.url || !blog.title) {
       return response.status(400).json({ error: 'url and title must contain something' })
     }
 
@@ -40,10 +40,10 @@ blogsRouter.post('/', async (request, response) => {
     response.status(201).json(blog)
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError') {
-      response.status(401).json({ error: exception.message })
+      return response.status(401).json({ error: exception.message })
     } else {
       console.log(exception)
-      response.status(500).json({ error: 'something went wrong...' })
+      return response.status(500).json({ error: 'something went wrong...' })
     }
   }
 
